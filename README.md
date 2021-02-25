@@ -1,62 +1,96 @@
-<img src=".github/Detectron2-Logo-Horz.svg" width="300" >
+# Simple multi-dataset detection
+An object detector trained on multiple large-scale datasets with a unified label space; Winning solution of ECCV 2020 Robust Vision Challenges.
 
-Detectron2 is Facebook AI Research's next generation software system
-that implements state-of-the-art object detection algorithms.
-It is a ground-up rewrite of the previous version,
-[Detectron](https://github.com/facebookresearch/Detectron/),
-and it originates from [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/).
+<p align="center"> <img src='projects/UniDet/unidet_docs/unidet_teaser.jpg' align="center" height="170px"> </p>
 
-<div align="center">
-  <img src="https://user-images.githubusercontent.com/1381301/66535560-d3422200-eace-11e9-9123-5535d469db19.png"/>
-</div>
+> [**Simple multi-dataset detection**](http://arxiv.org/abs/xxxx.xxxxx),            
+> Xingyi Zhou, Vladlen Koltun, Philipp Kr&auml;henb&uuml;hl,        
+> *arXiv technical report ([arXiv xxxx.xxxxx](http://arxiv.org/abs/xxxx.xxxxx))*         
 
-### What's New
-* It is powered by the [PyTorch](https://pytorch.org) deep learning framework.
-* Includes more features such as panoptic segmentation, Densepose, Cascade R-CNN, rotated bounding boxes, PointRend,
-  DeepLab, etc.
-* Can be used as a library to support [different projects](projects/) on top of it.
-  We'll open source more research projects in this way.
-* It [trains much faster](https://detectron2.readthedocs.io/notes/benchmarks.html).
-* Models can be exported to TorchScript format or Caffe2 format for deployment.
+Contact: [zhouxy@cs.utexas.edu](mailto:zhouxy@cs.utexas.edu). Any questions or discussions are welcomed! 
 
-See our [blog post](https://ai.facebook.com/blog/-detectron2-a-pytorch-based-modular-object-detection-library-/)
-to see more demos and learn about detectron2.
+## Abstract
+
+How do we build a general and broad object detection system? We use all labels of all concepts ever annotated. These labels span diverse datasets with potentially inconsistent taxonomies. In this paper, we present a simple method for training a unified detector on multiple large-scale datasets. We use dataset-specific training protocols and losses, but share a common detection architecture with dataset-specific outputs. We show how to automatically integrate these dataset-specific outputs into a common semantic taxonomy. In contrast to prior work, our approach does not require manual taxonomy reconciliation. Our multi-dataset detector performs as well as dataset-specific models on each training domain, but generalizes much better to new unseen domains. Entries based on the presented methodology ranked first in the object detection and instance segmentation tracks of the ECCV 2020 Robust Vision Challenge.
+
+## Features at a glance
+
+- We trained a unified object detector on 4 large-scale detection datasets: COCO, Objects365, OpenImages, and Mapillary, with state-of-the-art performance on all of them.
+
+- The model predicts class labels in a **learned** unified label space.
+
+- The model can be directly used to test on novel datasets outside the training datasets.
+
+- In this repo, we also provide state-of-the-art baselines for Objects365 and OpenImages.
+
+## Main results
+
+- [RVC challenge](http://www.robustvision.net/leaderboard.php?benchmark=object)
+
+| COCO test-challenge | OpenImages public test | Mapillary test | Objects365 val |
+|---------------------|------------------------|----------------|----------------|
+| 52.9                | 60.6                   | 25.3           | 33.7           |
+
+Results are obtained using a Cascade-RCNN with ResNeSt200 trained in an 8x schedule.
+
+
+
+- Unified model vs. ensemble of dataset-specific models with known test domains.
+
+|                       |  COCO     | Objects365   |  OpenImages  |  mean. |
+|-----------------------|-----------|--------------|--------------|--------|
+|Unified                | 45.4      | 24.4         | 66.0         | 45.3   |
+|Dataset-specific models| 42.5      | 24.9         | 65.7         | 44.4   |
+
+Results are obtained using a Cascade-RCNN with Res50 trained in an 8x schedule.
+
+- Zero-shot cross dataset evaluation
+
+|                |  VOC  | VIPER |  CityScapes  | ScanNet | WildDash | CrowdHuman | KITTI | mean |
+|----------------|-------|-------|--------------|---------|----------|------------|-------|------|
+|Unified         | 82.9  | 21.3  | 52.6         | 29.8    | 34.7     | 70.7       | 39.9  | 47.3 |
+|Oracle models   | 80.3  | 31.8  | 54.6         | 44.7    | -        | 80.0       | -     | -    |
+
+Results are obtained using a Cascade-RCNN with Res50 trained in an 8x schedule.
+
+
 
 ## Installation
 
-See [INSTALL.md](INSTALL.md).
+Our project is developed on [detectron2](https://github.com/facebookresearch/detectron2). Please follow the official detectron2 [installation](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md). All our code is under `projects/UniDet/`. In theory, you should be able to copy-paste `projects/UniDet/` to the latest detectron2 release or your own detectron2 repo to run our project. There might be API changes in future detectron2 releases that make it incompatible. 
 
-## Getting Started
+## Demo
 
-Follow the [installation instructions](https://detectron2.readthedocs.io/tutorials/install.html) to
-install detectron2.
+We use the same inference API as detectorn2. To run inference on an image folder using our pretrained model, run
 
-See [Getting Started with Detectron2](https://detectron2.readthedocs.io/tutorials/getting_started.html),
-and the [Colab Notebook](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)
-to learn about basic usage.
+~~~
+python projects/UniDet/demo/demo.py --config-file projects/UniDet/configs/Unified_learned_OCIM_R50_6x+2x.yaml --input images/*.jpg --opts MODEL.WEIGHTS models/Unified_learned_OCIM_R50_6x+2x.pth
+~~~
 
-Learn more at our [documentation](https://detectron2.readthedocs.org).
-And see [projects/](projects/) for some projects that are built on top of detectron2.
+If setup correctly, the output should look like:
+<p align="center"> <img src='projects/UniDet/unidet_docs/example_output2.jpg' align="center" height="460px"> </p>
 
-## Model Zoo and Baselines
+*The sample image is from [WildDash](https://wilddash.cc/) dataset.
 
-We provide a large set of baseline results and trained models available for download in the [Detectron2 Model Zoo](MODEL_ZOO.md).
+Note that the model predicts all labels in its label hierarchy tree (for example, both `vehicle` and `car` for a car), following the protocol in OpenImages.
 
+## Benchmark evaluation and training
+
+After installation, follow the instructions in [DATASETS.md](projects/UniDet/unidet_docs/DATASETS.md) to setup the (many) datasets. Then check [REPRODUCE.md](projects/UniDet/unidet_docs/REPRODUCE.md) to reproduce the results in the paper.
 
 ## License
 
-Detectron2 is released under the [Apache 2.0 license](LICENSE).
+All our code under `projects/Unidet/` is under [Apache 2.0 license](projects/Unidet/LICENSE). The code from detectron2 follows the original [Apache 2.0 license](LICENSE).
 
-## Citing Detectron2
 
-If you use Detectron2 in your research or wish to refer to the baseline results published in the [Model Zoo](MODEL_ZOO.md), please use the following BibTeX entry.
 
-```BibTeX
-@misc{wu2019detectron2,
-  author =       {Yuxin Wu and Alexander Kirillov and Francisco Massa and
-                  Wan-Yen Lo and Ross Girshick},
-  title =        {Detectron2},
-  howpublished = {\url{https://github.com/facebookresearch/detectron2}},
-  year =         {2019}
-}
-```
+## Citation
+
+If you find this project useful for your research, please use the following BibTeX entry.
+
+    @inproceedings{zhou2021simple,
+      title={Simple multi-dataset detection},
+      author={Zhou, Xingyi and Koltun, Vladlen and Kr{\"a}henb{\"u}hl, Philipp},
+      booktitle={arXiv preprint arXiv:xxxx.xxxxx},
+      year={2021}
+    }
