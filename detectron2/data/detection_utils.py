@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) Facebook, Inc. and its affiliates.
+# Modified by Xingyi Zhou: check_image_size: print warning message instead
+# raise error when size mismatches. This is to handle legacy OpenImages 
+# annotations.
 
 """
 Common data processing utilities that are used in a

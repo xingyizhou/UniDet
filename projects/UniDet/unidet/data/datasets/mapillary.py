@@ -97,7 +97,6 @@ _PREDEFINED_SPLITS = {
     "mapillary_val": ("mapillary/validation/images/", "mapillary/annotations/validation_fix_id.json"),
     # "mapillary_val": ("mapillary/validation/images/", "mapillary/annotations/validation.json"),
     "mapillary_960_train": ("mapillary/training/images960/", "mapillary/annotations/training960_fix_id.json"),
-    "mapillary_960_val": ("mapillary/validation/images960/", "mapillary/annotations/validation960_fix_id.json"),
     'mapillary_test': ('mapillary/testing/images/', 'mapillary/annotations/test_image_info_fix_id.json')
 }
 

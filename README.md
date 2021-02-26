@@ -3,9 +3,9 @@ An object detector trained on multiple large-scale datasets with a unified label
 
 <p align="center"> <img src='projects/UniDet/unidet_docs/unidet_teaser.jpg' align="center" height="170px"> </p>
 
-> [**Simple multi-dataset detection**](http://arxiv.org/abs/xxxx.xxxxx),            
+> [**Simple multi-dataset detection**](http://arxiv.org/abs/2102.13086),            
 > Xingyi Zhou, Vladlen Koltun, Philipp Kr&auml;henb&uuml;hl,        
-> *arXiv technical report ([arXiv xxxx.xxxxx](http://arxiv.org/abs/xxxx.xxxxx))*         
+> *arXiv technical report ([arXiv 2102.13086](http://arxiv.org/abs/2102.13086))*         
 
 Contact: [zhouxy@cs.utexas.edu](mailto:zhouxy@cs.utexas.edu). Any questions or discussions are welcomed! 
 
@@ -80,7 +80,7 @@ After installation, follow the instructions in [DATASETS.md](projects/UniDet/uni
 
 ## License
 
-All our code under `projects/Unidet/` is under [Apache 2.0 license](projects/Unidet/LICENSE). The code from detectron2 follows the original [Apache 2.0 license](LICENSE).
+All our code under `projects/Unidet/` is under [Apache 2.0 license](projects/UniDet/LICENSE). The code from detectron2 follows the original [Apache 2.0 license](LICENSE).
 
 
 
@@ -91,6 +91,6 @@ If you find this project useful for your research, please use the following BibT
     @inproceedings{zhou2021simple,
       title={Simple multi-dataset detection},
       author={Zhou, Xingyi and Koltun, Vladlen and Kr{\"a}henb{\"u}hl, Philipp},
-      booktitle={arXiv preprint arXiv:xxxx.xxxxx},
+      booktitle={arXiv preprint arXiv:2102.13086},
       year={2021}
     }
