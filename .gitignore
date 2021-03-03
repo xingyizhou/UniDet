@@ -5,7 +5,7 @@ inference_test_output
 
 
 *.png
-*.json
+# *.json
 *.diff
 # *.jpg
 !/projects/DensePose/doc/images/*.jpg
@@ -48,6 +48,7 @@ _darcs
 /detectron2/model_zoo/configs
 /datasets/*
 !/datasets/*.*
+!/datasets/label_spaces
 /projects/*/datasets
 /models
 /snippet
