@@ -53,7 +53,7 @@ Results are obtained using a Cascade-RCNN with Res50 trained in an 8x schedule.
 
 Results are obtained using a Cascade-RCNN with Res50 trained in an 8x schedule.
 
-
+More models can be found [here](projects/UniDet/unidet_docs/REPRODUCE.md).
 
 ## Installation
 
