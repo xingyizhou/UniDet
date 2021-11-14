@@ -13,7 +13,7 @@ MODEL:
     NORM: "SyncBN"
   META_ARCHITECTURE: "UnifiedRCNN"
   ROI_HEADS:
-    NUM_CLASSES: 701
+    NUM_CLASSES: 722
     NAME: "UnifiedCascadeROIHeads"
   ROI_BOX_HEAD:
     USE_SIGMOID_CE: True
