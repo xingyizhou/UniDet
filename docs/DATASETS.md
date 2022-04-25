@@ -82,8 +82,8 @@ oid/
 Then convert the annotation to COCO format:
 
 ~~~
-python projects/UniDet/tools/convert_datasets/convert_oid.py -p datasets/oid/ --subsets train
-python projects/UniDet/tools/convert_datasets/convert_oid.py -p datasets/oid/ --subsets val --expand_label
+python tools/convert_datasets/convert_oid.py -p datasets/oid/ --subsets train
+python tools/convert_datasets/convert_oid.py -p datasets/oid/ --subsets val --expand_label
 ~~~
 
 This will produce `oid_challenge_2019_train_bbox.json` and `oid_challenge_2019_val_expanded.json` under `oid/annotations/`.
@@ -94,7 +94,7 @@ This is used in the [officiel evaluation metric](https://storage.googleapis.com/
 Next, preprocess and convert the original label hierarchy.
 
 ~~~
-python projects/UniDet/tools/convert_datasets/get_oid_hierarchy.py datasets/oid/annotations/oid_challenge_2019_val_expanded.json datasets/oid/annotations/challenge-2019-label500-hierarchy.json
+python tools/convert_datasets/get_oid_hierarchy.py datasets/oid/annotations/oid_challenge_2019_val_expanded.json datasets/oid/annotations/challenge-2019-label500-hierarchy.json
 ~~~
 
 This creates `challenge-2019-classes-description-500-list.json` under `oid/annotations/`. The file will be used by the hierarchical-aware loss and the OpenImage evaluation script.
@@ -182,7 +182,7 @@ crowdhuman/
 Convert them to COCO format:
 
 ~~~
-python projects/UniDet/tools/convert_datasets/convert_crowdhuman.py
+python tools/convert_datasets/convert_crowdhuman.py
 ~~~
 
 This creates `corwdhuman/annotations/train.json` and `corwdhuman/annotations/val.json`.

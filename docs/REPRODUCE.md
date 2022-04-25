@@ -18,7 +18,7 @@ A partitioned detector is a detector with split-classifier for each dataset. Dur
 To evaluate a partitioned detector on the validation set of its training datasets (e.g, Partitioned_COI_R50_2x), run 
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Partitioned_COI_R50_2x.yaml --eval-only --num-gpus 8 MODEL.WEIGHTS models/Partitioned_COI_R50_2x.pth
+python train_net.py --config-file configs/Partitioned_COI_R50_2x.yaml --eval-only --num-gpus 8 MODEL.WEIGHTS models/Partitioned_COI_R50_2x.pth
 ~~~
 
 With 8 GPUs, the evaluation will take 2 mins for COCO, >30mins for OpenImages, and >15mins for Objects365.
@@ -27,13 +27,13 @@ The results should meet the numbers above.
 To train these models, run
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Partitioned_COI_R50_2x.yaml --num-gpus 8
+python train_net.py --config-file configs/Partitioned_COI_R50_2x.yaml --num-gpus 8
 ~~~
 
 Training a `2x` Res50 model takes ~24 hours on 8 RTX-2080-Tis. Both our `Partitioned_COI_R50_8x` model and `Partitioned_COIM_R50_6x+2x` are finetuned from the `Partitioned_COI_R50_6x` model. To finetune a model, run
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Partitioned_COI_R50_8x.yaml --num-gpus 8 MODEL.WEIGHTS output/UniDet/Partitioned_COI_R50_2x/model_final.pth SOLVER.RESET_ITER True SOLVER.MAX_ITER 180000 SOLVER.STEPS "(120000,160000)"
+python train_net.py --config-file configs/Partitioned_COI_R50_8x.yaml --num-gpus 8 MODEL.WEIGHTS output/UniDet/Partitioned_COI_R50_2x/model_final.pth SOLVER.RESET_ITER True SOLVER.MAX_ITER 180000 SOLVER.STEPS "(120000,160000)"
 ~~~
 
 ## Learning a unified label space
@@ -41,7 +41,7 @@ python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Partit
 Once we have a partitioned detector, we run it on the validation sets of the training datasets to collect predictions. We will learn the class relations based on these predictions.
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/Partitioned_COI_R50_6x.yaml --num-gpus 8 --eval-only MULTI_DATASET.UNIFIED_EVAL True
+python train_net.py --config-file Partitioned_COI_R50_6x.yaml --num-gpus 8 --eval-only MULTI_DATASET.UNIFIED_EVAL True
 ~~~
 
 This produces `output/UniDet/Partitioned_COI_R50_6x/inference_*/unified_instances_results.json`. For your convenience, we have uploaded our predictions [here](https://drive.google.com/drive/folders/1dDLiQfjEE0PqRlb7gtja-ermW2HJK5Tz?usp=sharing).
@@ -51,7 +51,7 @@ The notebook prints spread-sheet-friendly text. We can copy-paste this to spread
 Then download the spread-sheet as `.csv` file and put it under `dataset/label_spaces`, and run the following script to convert the `.csv` to a json file:
 
 ~~~
-python projects/UniDet/tools/create_unified_label_json.py datasets/label_space/learned_mAP.csv
+python tools/create_unified_label_json.py datasets/label_space/learned_mAP.csv
 ~~~
 
 This produces` datasets/label_space/learned_mAP.json`.
@@ -62,7 +62,7 @@ We have already put all converted files used in this project in this folder.
 With a unified label space, we can turn a partitioned detector into a unified detector by merging its last classification layer. A unified detector does not need to know the image source during testing. To merge the `Partitioned_COI_R50_2x` model into a unified detector using our learned label space `datasets/label_spaces/learned_mAP.json`, run
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Partitioned_COI_R50_2x.yaml --eval-only --num-gpus 8 MODEL.WEIGHTS models/Partitioned_COI_R50_2x.pth MULTI_DATASET.UNIFY_LABEL_TEST True MULTI_DATASET.UNIFIED_LABEL_FILE datasets/label_spaces/learned_mAP.json
+python train_net.py --config-file configs/Partitioned_COI_R50_2x.yaml --eval-only --num-gpus 8 MODEL.WEIGHTS models/Partitioned_COI_R50_2x.pth MULTI_DATASET.UNIFY_LABEL_TEST True MULTI_DATASET.UNIFIED_LABEL_FILE datasets/label_spaces/learned_mAP.json
 ~~~
 
 The expected results should be 41.0mAP for COCO, 20.3 mAP for O365, and 62.6 mAP@0.5 for OpenImages.
@@ -71,7 +71,7 @@ The expected results should be 41.0mAP for COCO, 20.3 mAP for O365, and 62.6 mAP
 To retrain a unified detector end-to-end using the learned label space, run
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Unified_COI_R50_2x.yaml --num-gpus 8
+python train_net.py --config-file configs/Unified_COI_R50_2x.yaml --num-gpus 8
 ~~~
 
 The trained model is expected to give 42.0mAP for COCO, 20.9 mAP for O365, and 62.8 mAP@0.5 for OpenImages.
@@ -99,7 +99,7 @@ The model above gives a similar performance on the all validations sets.
 To evaluate our unified model on new test datasets, run
 
 ~~~
-python projects/UniDet/train_net.py --config-file projects/UniDet/configs/Unified_OCIM_R50_6x+2x.yaml --num-gpus 8 --eval-only MATCH_NOVEL_CLASSES_FILE 'datasets/label_spaces/learned_mAP_labelmap_test.json' UNIFIED_EVAL True UNIFIED_NOVEL_CLASSES_EVAL True DATASETS.TEST "('voc_cocoformat_test','viper_val', 'scannet_val','wilddash_public','kitti_train','crowdhuman_val', 'cityscapes_cocoformat_val',)"
+python train_net.py --config-file configs/Unified_OCIM_R50_6x+2x.yaml --num-gpus 8 --eval-only MATCH_NOVEL_CLASSES_FILE 'datasets/label_spaces/learned_mAP_labelmap_test.json' UNIFIED_EVAL True UNIFIED_NOVEL_CLASSES_EVAL True DATASETS.TEST "('voc_cocoformat_test','viper_val', 'scannet_val','wilddash_public','kitti_train','crowdhuman_val', 'cityscapes_cocoformat_val',)"
 ~~~
 
 The results should be
@@ -111,7 +111,7 @@ The results should be
 The novel class matching file `datasets/label_spaces/learned_mAP+M_labelmap_test.json` is obtained from matching the test dataset labels to the unified label space by a word-embedding-based matching:
 
 ~~~
-python projects/UniDet/tools/match_test_datasets.py datasets/label_spaces/learned_mAP+M.json
+python tools/match_test_datasets.py datasets/label_spaces/learned_mAP+M.json
 ~~~
 
 The scripts require the GloVe embedding dict, which is downloaded from [here](https://github.com/stanfordnlp/GloVe) and should be placed at `datasets/glove.42B.300d.txt`. We have already provided our matched file under `datasets/label_spaces/learned_mAP+M_labelmap_test.json` if you don't want to run the matching yourself.

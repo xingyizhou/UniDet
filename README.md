@@ -60,7 +60,7 @@ Our project is developed on [detectron2](https://github.com/facebookresearch/det
 We use the same inference API as detectorn2. To run inference on an image folder using our pretrained model, run
 
 ~~~
-python demo/demo.py --config-file projects/UniDet/configs/Unified_learned_OCIM_R50_6x+2x.yaml --input images/*.jpg --opts MODEL.WEIGHTS models/Unified_learned_OCIM_R50_6x+2x.pth
+python demo.py --config-file configs/Unified_learned_OCIM_R50_6x+2x.yaml --input images/*.jpg --opts MODEL.WEIGHTS models/Unified_learned_OCIM_R50_6x+2x.pth
 ~~~
 
 If setup correctly, the output should look like:
@@ -76,8 +76,7 @@ After installation, follow the instructions in [DATASETS.md](docs/DATASETS.md) t
 
 ## License
 
-All our code under `projects/Unidet/` is under [Apache 2.0 license](projects/UniDet/LICENSE). The code from detectron2 follows the original [Apache 2.0 license](LICENSE).
-
+Our code is under [Apache 2.0 license](LICENSE).
 
 
 ## Citation
@@ -87,6 +86,6 @@ If you find this project useful for your research, please use the following BibT
     @inproceedings{zhou2021simple,
       title={Simple multi-dataset detection},
       author={Zhou, Xingyi and Koltun, Vladlen and Kr{\"a}henb{\"u}hl, Philipp},
-      booktitle={arXiv preprint arXiv:2102.13086},
-      year={2021}
+      booktitle={CVPR},
+      year={2022}
     }

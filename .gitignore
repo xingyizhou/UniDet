@@ -9,7 +9,6 @@ inference_test_output
 # *.json
 *.diff
 # *.jpg
-!/projects/DensePose/doc/images/*.jpg
 
 # compilation and distribution
 __pycache__
@@ -50,6 +49,5 @@ _darcs
 /datasets/*
 !/datasets/*.*
 !/datasets/label_spaces
-/projects/*/datasets
 /models
 /snippet
