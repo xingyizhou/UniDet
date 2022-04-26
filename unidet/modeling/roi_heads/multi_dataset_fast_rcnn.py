@@ -2,16 +2,12 @@ import logging
 import math
 from typing import Dict, Union
 import torch
-from fvcore.nn import giou_loss, smooth_l1_loss
 from torch import nn
 from torch.nn import functional as F
 
-from detectron2.config import configurable
 from detectron2.layers import Linear, ShapeSpec, batched_nms, cat, nonzero_tuple
-from detectron2.modeling.box_regression import Box2BoxTransform
-from detectron2.structures import Boxes, Instances
-from detectron2.utils.events import get_event_storage
-from .custom_fast_rcnn import CustomFastRCNNOutputLayers, CustomFastRCNNOutputs
+from detectron2.modeling.roi_heads.fast_rcnn import _log_classification_stats
+from .custom_fast_rcnn import CustomFastRCNNOutputLayers
 
 class MultiDatasetFastRCNNOutputLayers(CustomFastRCNNOutputLayers):
     def __init__(
@@ -48,18 +44,31 @@ class MultiDatasetFastRCNNOutputLayers(CustomFastRCNNOutputLayers):
         return scores, proposal_deltas
 
     def losses(self, predictions, proposals, dataset_source):
-        is_open_image = (dataset_source == self.openimage_index)
+        use_advanced_loss = (dataset_source == self.openimage_index)
         scores, proposal_deltas = predictions
-        losses = CustomFastRCNNOutputs(
-            self.cfg,
-            self.box2box_transform,
-            scores,
-            proposal_deltas,
-            proposals,
-            self.smooth_l1_beta,
-            self.box_reg_loss_type,
-            self.freq_weight if is_open_image else None, 
-            self.hierarchy_weight if is_open_image else None,
-        ).losses()
-        return {k: v * self.loss_weight.get(k, 1.0) for k, v in losses.items()}
+        gt_classes = (
+            cat([p.gt_classes for p in proposals], dim=0) if len(proposals) else torch.empty(0)
+        )
+        _log_classification_stats(scores, gt_classes)
 
+        if len(proposals):
+            proposal_boxes = cat([p.proposal_boxes.tensor for p in proposals], dim=0)  # Nx4
+            assert not proposal_boxes.requires_grad, "Proposals should not require gradients!"
+            gt_boxes = cat(
+                [(p.gt_boxes if p.has("gt_boxes") else p.proposal_boxes).tensor for p in proposals],
+                dim=0,
+            )
+        else:
+            proposal_boxes = gt_boxes = torch.empty((0, 4), device=proposal_deltas.device)
+
+        if self.use_sigmoid_ce:
+            loss_cls = self.sigmoid_cross_entropy_loss(
+                scores, gt_classes, use_advanced_loss)
+        else:
+            assert not use_advanced_loss
+            loss_cls = self.softmax_cross_entropy_loss(scores, gt_classes)
+        return {
+            "loss_cls": loss_cls, 
+            "loss_box_reg": self.box_reg_loss(
+                proposal_boxes, gt_boxes, proposal_deltas, gt_classes)
+        }
