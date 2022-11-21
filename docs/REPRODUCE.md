@@ -1,6 +1,6 @@
 # REPRODUCE
 
-This document provides instructions to reproduce the results in our paper. Before getting started, make sure you have finished installation and dataset setup. All models can be directly downloaded [here](https://drive.google.com/file/d/147cBVObkiFMwoHj1B79lsVQZh6KiBksf/view?usp=sharing).
+This document provides instructions to reproduce the results in our paper. Before getting started, make sure you have finished installation and dataset setup. All models can be directly downloaded [here](https://drive.google.com/drive/folders/1rW-oesL2L-9QbD_HRhpifJm15z5AOel-).
 
 
 ## Partitioned detector
@@ -9,11 +9,11 @@ A partitioned detector is a detector with split-classifier for each dataset. Dur
 
 | Model                      | COCO | Objects365 | OpenImages | Mapillary | links   |
 |----------------------------|------|------------|------------|-----------|---------|
-| Partitioned_COI_R50_2x     | 41.8 | 20.6       | 62.7       | -         |[config](../configs/Partitioned_COI_R50_2x.yaml)/ [weights](https://drive.google.com/file/d/1GQrMVtedm4On1w5t_CKPiy8gSdeJKZeg/view?usp=sharing)|
-| Partitioned_COI_R50_6x     | 44.6 | 23.6       | 64.8       | -         |[config](../configs/Partitioned_COI_R50_6x.yaml)/ [weights](https://drive.google.com/file/d/1KlJuAt9SNPAsYYwL-lpmk6GfHEaV-Lip/view?usp=sharing)|
-| Partitioned_COI_R50_8x     | 45.5 | 24.6       | 65.7       | -         |[config](../configs/Partitioned_COI_R50_8x.yaml)/ [weights](https://drive.google.com/file/d/1HHfqmRJh3Slcl5A2jcvXV9qb3J5dyDAp/view?usp=sharing)|
-| Partitioned_COIM_R50_6x+2x | 45.1 | 24.0       | 65.1       | 14.9      |[config](../configs/Partitioned_COIM_R50_6x+2x.yaml)/ [weights](https://drive.google.com/file/d/1SdtNM-7bkOLkTu1SStPLk1sFt536Vz0n/view?usp=sharing)|
-| Partitioned_COI_RS101_2x   | 48.5 | 27.7       | 67.7       | -         |[config](../configs/Partitioned_COI_RS101_2x.yaml)/ [weights](https://drive.google.com/file/d/1MQOQvYTIAp1K2UKTWEPoNE6LrnnvTlnD/view?usp=sharing)|
+| Partitioned_COI_R50_2x     | 41.8 | 20.6       | 62.7       | -         |[config](../configs/Partitioned_COI_R50_2x.yaml)/ [weights](https://drive.google.com/file/d/1lUvgRQGcdheN7BHa9zoJoGCOLc5_ziej)|
+| Partitioned_COI_R50_6x     | 44.6 | 23.6       | 64.8       | -         |[config](../configs/Partitioned_COI_R50_6x.yaml)/ [weights](https://drive.google.com/file/d/1o2yP9ghS5UUyfEh6WVuMdjnGKpjsqDuE)|
+| Partitioned_COI_R50_8x     | 45.5 | 24.6       | 65.7       | -         |[config](../configs/Partitioned_COI_R50_8x.yaml)/ [weights](https://drive.google.com/file/d/1D6kh1P2VnYOE3IkW03Vp_TEJeXPWXorE)|
+| Partitioned_COIM_R50_6x+2x | 45.1 | 24.0       | 65.1       | 14.9      |[config](../configs/Partitioned_COIM_R50_6x+2x.yaml)/ [weights](https://drive.google.com/file/d/186NjyTDiWaFmkLlj_3kl-mojcJTzqER8)|
+| Partitioned_COI_RS101_2x   | 48.5 | 27.7       | 67.7       | -         |[config](../configs/Partitioned_COI_RS101_2x.yaml)/ [weights](https://drive.google.com/file/d/110JSpmfNU__7T3IMSJwv0QSfLLo_AqtZ)|
 
 To evaluate a partitioned detector on the validation set of its training datasets (e.g, Partitioned_COI_R50_2x), run 
 
@@ -44,7 +44,7 @@ Once we have a partitioned detector, we run it on the validation sets of the tra
 python train_net.py --config-file Partitioned_COI_R50_6x.yaml --num-gpus 8 --eval-only MULTI_DATASET.UNIFIED_EVAL True
 ~~~
 
-This produces `output/UniDet/Partitioned_COI_R50_6x/inference_*/unified_instances_results.json`. For your convenience, we have uploaded our predictions [here](https://drive.google.com/drive/folders/1dDLiQfjEE0PqRlb7gtja-ermW2HJK5Tz?usp=sharing).
+This produces `output/UniDet/Partitioned_COI_R50_6x/inference_*/unified_instances_results.json`.
 Next, we load the predictions and learn the unified label space using this [ipython notebook](../tools/UniDet_learn_labelspace_mAP.ipynb). 
 
 The notebook prints spread-sheet-friendly text. We can copy-paste this to spreadsheet software (e.g., Google sheet) to visualize the label space.
@@ -80,13 +80,13 @@ We provide a zoo of retrained unified detectors below:
 
 | Model                              | COCO | Objects365 | OpenImages | Mapillary | weights |
 |------------------------------------|------|------------|------------|-----------|---------|
-| Unified_human_COI_R50_2x           | 41.5 | 20.6       | 62.6       | -         |[config](../configs/Unified_human_COI_R50_2x.yaml)/ [weights](https://drive.google.com/file/d/15f-JLaJTvmlL9Jx1pNwP0N07si5LIJBi/view?usp=sharing)|
-| Unified_learned_COI_R50_2x         | 42.0 | 20.9       | 62.8       | -         |[config](../configs/Unified_learned_COI_R50_2x.yaml)/ [weights](https://drive.google.com/file/d/1kmtEcuqlbFbeRZDCADgDs-JsGEcnSuAz/view?usp=sharing)|
-| Unified_learned_COI_R50_6x         | 44.6 | 23.3       | 64.5       | -         |[config](../configs/Unified_learned_COI_R50_6x.yaml)/ [weights](https://drive.google.com/file/d/1T3q63IHAl5dz6utu2-VbeCNxQOfNqCZK/view?usp=sharing)|
-| Unified_learned_COI_R50_8x         | 45.4 | 24.4       | 66.0       | -         |[config](../configs/Unified_learned_COI_R50_8x.yaml)/ [weights](https://drive.google.com/file/d/1PZ_EQDfCSkmiaJobrCRddu6Bf6QdU1LB/view?usp=sharing)|
-| Unified_learned_COIM_R50_6x+2x     | 44.9 | 23.9       | 65.7       | 14.8      |[config](../configs/Unified_learned_COIM_R50_6x+2x.yaml)/ [weights](https://drive.google.com/file/d/1UHjVU5NeAtKlptNRzUy5PB96m_qsQEk9/view?usp=sharing)|
-| Unified_learned_COI_RS200_6x       | 52.6 | 31.1       | 67.6       | -         |[config](../configs/Unified_learned_COI_RS200_6x.yaml)/ [weights](https://drive.google.com/file/d/147cBVObkiFMwoHj1B79lsVQZh6KiBksf/view?usp=sharing)|
-| Unified_learned_COIM_RS200_6x+2x   | 52.2 | 31.3       | 67.8       | 20.3      |[config](../configs/Unified_learned_COIM_RS200_6x+2x.yaml)/ [weights](https://drive.google.com/file/d/19gfAVvlh_MYKqAW3IYL2il5UB15k3jEP/view?usp=sharing)|
+| Unified_human_COI_R50_2x           | 41.5 | 20.6       | 62.6       | -         |[config](../configs/Unified_human_COI_R50_2x.yaml)/ [weights](https://drive.google.com/file/d/1z5qw03bHK8XX_4Nnjvnk7IgfiSw84Cjw)|
+| Unified_learned_COI_R50_2x         | 42.0 | 20.9       | 62.8       | -         |[config](../configs/Unified_learned_COI_R50_2x.yaml)/ [weights](https://drive.google.com/file/d/1RT0KCM1rr5Y8c_gsqa_mQ4parnlOog7P)|
+| Unified_learned_COI_R50_6x         | 44.6 | 23.3       | 64.5       | -         |[config](../configs/Unified_learned_COI_R50_6x.yaml)/ [weights](https://drive.google.com/file/d/1DIzXuk5BZqjZy29YVMFhxCo9ZYpzMZO2)|
+| Unified_learned_COI_R50_8x         | 45.4 | 24.4       | 66.0       | -         |[config](../configs/Unified_learned_COI_R50_8x.yaml)/ [weights](https://drive.google.com/file/d/1bFpYy7FzmTQj9JKbCgixuAwrb5kkepZ3)|
+| Unified_learned_COIM_R50_6x+2x     | 44.9 | 23.9       | 65.7       | 14.8      |[config](../configs/Unified_learned_COIM_R50_6x+2x.yaml)/ [weights](https://drive.google.com/file/d/1C4sgkirmgMumKXXiLOPmCKNTZAc3oVbq)|
+| Unified_learned_COI_RS200_6x       | 52.6 | 31.1       | 67.6       | -         |[config](../configs/Unified_learned_COI_RS200_6x.yaml)/ [weights](https://drive.google.com/file/d/1MP8B44_FbSUOY-u7_hkXLF28Zrk-JDRr)|
+| Unified_learned_COIM_RS200_6x+2x   | 52.2 | 31.3       | 67.8       | 20.3      |[config](../configs/Unified_learned_COIM_RS200_6x+2x.yaml)/ [weights](https://drive.google.com/file/d/1HvUv399Vie69dIOQX0gnjkCM0JUI9dqI)|
 
 Similarly, the `Unified_learned_COI_R50_8x` and `Unified_learned_COI_R50_8x` models are finetuned from the `Unified_learned_COI_R50_6x` model in our implementation.
 

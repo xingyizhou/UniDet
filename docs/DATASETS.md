@@ -3,7 +3,7 @@
 Our project involves 11 datasets. 
 4 datasets (COCO, Objects365, OpenImages, Mapillary) are used in training/ evaluation and the rest are only used in testing.
 For most experiments in the paper, we only need the 3 large datasets: COCO, Objects365, and OpenImages.
-All datasets should be placed under `$UNIDET_ROOT/datasets/`. It's OK to only setup part of them. Our pre-processed annotation files can be directly downloaded [here](https://drive.google.com/drive/folders/1C-8dNdnj8TbUEBKrjWXIsu62O_uIPgqN?usp=sharing).
+All datasets should be placed under `$UNIDET_ROOT/datasets/`. It's OK to only setup part of them. Our pre-processed annotation files can be directly downloaded [here](https://drive.google.com/drive/folders/1rW-oesL2L-9QbD_HRhpifJm15z5AOel-).
 
 ~~~
 $UNIDET_ROOT/
