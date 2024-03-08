@@ -60,7 +60,7 @@ Our project is developed on [detectron2](https://github.com/facebookresearch/det
 We use the same inference API as detectorn2. To run inference on an image folder using our pretrained model, run
 
 ~~~
-python demo.py --config-file configs/Unified_learned_OCIM_R50_6x+2x.yaml --input images/*.jpg --opts MODEL.WEIGHTS models/Unified_learned_OCIM_R50_6x+2x.pth
+python demo.py --config-file configs/Unified_learned_COIM_R50_6x+2x.yaml --input images/*.jpg --opts MODEL.WEIGHTS models/Unified_learned_COIM_R50_6x+2x.pth
 ~~~
 
 If setup correctly, the output should look like:
